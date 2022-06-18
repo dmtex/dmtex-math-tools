@@ -1,0 +1,66 @@
+= User Manual
+
+== Purpose
+
+The _dmtex-math-adapter_ component is dedicated to make it possible
+to do various arithmetic operations between incompatible types.
+For example, to add `Rational` to `BigDecimal`.
+
+== Code samples
+
+Using adapters in Java
+
+[source,java]
+----
+class Sample {
+  public static void main(String[] args) {
+    double value = Adapters.of(1.0) //<1>
+        .plus(BigDecimal.ONE) //<2>
+        .minus(Rational.HALF) //<3>
+        .times(BigRational.HALF) //<4>
+        .toNumber(); //<5>
+    System.out.println(value);
+  }
+}
+----
+<1> Create adapter from `double` value `1.0`.
+<2> Adds `BigDecimal` to `double`.
+<3> Subtracts `Ratianal` from `double`.
+<4> Multiplies `BigRatianal` and `double`.
+<5> Provides result as `Number` (`Double` in given case).
+
+The same sample in Groovy
+
+[source,groovy]
+----
+double value = ((Adapters.of(1.0) + BigDecimal.ONE - Rational.HALF)
+    * BigRational.HALF
+).toNumber()
+
+println(value)
+----
+
+For single operation the code can be simpler.
+For instance, in Java
+
+[source,java]
+----
+class Sample {
+  public static void main(String[] args) {
+    double value = Adapters.lookup(1.0) //<1>
+        .plus(BigDecimal.ONE); //<2>
+    System.out.println(value);
+  }
+}
+----
+<1> Create instance of `ArithmeticAware` from `double` value `1.0`.
+<2> Adds `BigDecimal` to `double` and gets `double` result immediately.
+
+The same code in Groovy
+
+[source,groovy]
+----
+double value = Adapters.lookup(1.0) + BigDecimal.ONE
+
+System.out.println(value)
+----
